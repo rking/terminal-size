@@ -34,8 +34,7 @@ class TerminalTest < MiniTest::Unit::TestCase
   end
 
   def test_integration_using_tmux
-    skip 'This test must be run from within tmux (with a split-window -h)' \
-      unless ENV['TMUX']
+    return warn "\nSKIP: integration test requires tmux" unless ENV['TMUX']
     # TODO: figure out how to get this to work if not already in a horizontal
     # split, e.g.:
     # system 'tmux split-window -h'
