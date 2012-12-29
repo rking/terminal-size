@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/ConradIrwin/pry-rescue.git
+  revision: 6a31294b730f8caab8b0998eb1e9ee0211909f48
+  branch: feature/kill-pry-rescue
+  specs:
+    pry-rescue (0.14)
+      interception (>= 0.3)
+      pry
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -112,9 +121,6 @@ GEM
       eventmachine
       highline
       pry (~> 0.9)
-    pry-rescue (0.14)
-      interception (>= 0.3)
-      pry
     pry-stack_explorer (0.4.7)
       binding_of_caller (~> 0.6.8)
     pry-syntax-hacks (0.0.6)
@@ -146,4 +152,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  pry-rescue!
   working
