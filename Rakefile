@@ -1,3 +1,1 @@
-task :default do
-  sh 'testrb test'
-end
+require 'bundler/gem_tasks'

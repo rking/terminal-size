@@ -1,0 +1,30 @@
+# Terminal.size
+
+A tiny gem to accomplish a simple task: Determining the terminal size.
+
+One of the guarantees of this project is that it will always be exactly one
+file: `lib/terminal-size/terminal.rb`
+
+So, if you want to come up with some automated way to slurp that into your
+codebase, it shouldn't break (and this would be better than a
+not-easily-updated Copy & Paste). I'm kicking around the idea of using this as
+an example of an automatic, namespaced fat-pack trick, but we'll see if that's
+really necessary.
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'terminal-size'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install terminal-size
+
+## Usage
+
+    p Terminal.size
