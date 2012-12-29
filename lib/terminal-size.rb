@@ -30,17 +30,13 @@ class Terminal
       nil
     end
 
-    # This is as reported by <sys/ioctl.h>
-    # Hard-coding because it seems like overkll to acutally involve C for this.
-    TIOCGWINSZ = {
-      /linux/ => 0x5413,
-      /darwin/ => 0x40087468, # thanks to brandon@brandon.io for the lookup!
-    }
     def tiocgwinsz_value_for platform
-      TIOCGWINSZ.each do |k,v|
-        return v if platform[k]
-      end
-      nil
+      # This is as reported by <sys/ioctl.h>
+      # Hard-coding because it seems like overkll to acutally involve C for this.
+      {
+        /linux/ => 0x5413,
+        /darwin/ => 0x40087468, # thanks to brandon@brandon.io for the lookup!
+      }.find{|k,v| platform[k]}
     end
 
     def size_via_stty
