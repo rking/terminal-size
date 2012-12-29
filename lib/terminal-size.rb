@@ -4,7 +4,7 @@ class Terminal
     def size
       size_via_low_level_ioctl or size_via_stty or nil
     end
-    def size!; size or _width_height_hash_from 80, 25 end
+    def size!; size or _height_width_hash_from 25, 80 end
 
     # These are experimental
     def resize direction, magnitude
@@ -25,7 +25,7 @@ class Terminal
       return unless $stdout.ioctl(code, buf).zero?
       return if IOCTL_INPUT_BUF == buf
       got = buf.unpack('S4')[0..1]
-      _width_height_hash_from *got
+      _height_width_hash_from *got
     rescue
       nil
     end
@@ -45,14 +45,14 @@ class Terminal
 
     def size_via_stty
       ints = `stty size`.scan(/\d+/).map &:to_i
-      _width_height_hash_from ints[1], ints[0]
+      _height_width_hash_from *ints
     rescue
       nil
     end
 
     private
-    def _width_height_hash_from *dimensions
-      { width: dimensions[0], height: dimensions[1] }
+    def _height_width_hash_from *dimensions
+      { height: dimensions[0], width: dimensions[1] }
     end
 
   end

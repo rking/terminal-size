@@ -1,4 +1,4 @@
-require 'test_helper'
+require './test/test_helper'
 require 'terminal-size'
 class TerminalTest < MiniTest::Unit::TestCase
   DEFAULT_SIZE = {width: 80, height: 25}
@@ -7,7 +7,7 @@ class TerminalTest < MiniTest::Unit::TestCase
       alias_method :actual_respond_to?, :respond_to?
     end
     brb_path = ENV['PATH']
-    $stdout.stub :respond_to?, -> m { :ioctl != m and actual_respond_to m } do
+    $stdin.stub :respond_to?, -> m { :ioctl != m and actual_respond_to m } do
       refute Terminal.size_via_low_level_ioctl
       ENV['PATH'] = ''
       refute Terminal.size_via_stty
@@ -24,14 +24,18 @@ class TerminalTest < MiniTest::Unit::TestCase
     refute_equal \
       Terminal.tiocgwinsz_value_for('linux'),
       Terminal.tiocgwinsz_value_for('darwin')
+    expected = {width: 133, height: 80}
     $stdout.stub :ioctl, -> num, buf { buf.replace FAKE_IOCTL_RESULT; 0 } do
-      expected = {width: 80, height: 133}
       assert_equal expected, Terminal.size_via_low_level_ioctl
+    end
+    Terminal.stub :`, '80 133' do
+      assert_equal expected, Terminal.size_via_stty
     end
   end
 
   def test_integration_using_tmux
-    skip 'Must be run from within tmux' unless ENV['TMUX']
+    skip 'This test must be run from within tmux (with a split-window -h)' \
+      unless ENV['TMUX']
     # TODO: figure out how to get this to work if not already in a horizontal
     # split, e.g.:
     # system 'tmux split-window -h'
