@@ -1,13 +1,14 @@
 require './test/test_helper'
 require 'terminal-size'
 class TerminalTest < MiniTest::Unit::TestCase
-  DEFAULT_SIZE = {width: 80, height: 25}
+  DEFAULT_SIZE = {:width => 80, :height => 25}
   def test_simulating_windows
     class << $stdout
       alias_method :actual_respond_to?, :respond_to?
     end
     brb_path = ENV['PATH']
-    $stdin.stub :respond_to?, -> m { :ioctl != m and actual_respond_to m } do
+    fake_respond_to = lambda {|m| :ioctl != m and actual_respond_to m }
+    $stdin.stub :respond_to?, fake_respond_to do
       refute Terminal.size_via_low_level_ioctl
       ENV['PATH'] = ''
       refute Terminal.size_via_stty
@@ -24,8 +25,9 @@ class TerminalTest < MiniTest::Unit::TestCase
     refute_equal \
       Terminal.tiocgwinsz_value_for('linux'),
       Terminal.tiocgwinsz_value_for('darwin')
-    expected = {width: 133, height: 80}
-    $stdout.stub :ioctl, -> num, buf { buf.replace FAKE_IOCTL_RESULT; 0 } do
+    expected = {:width => 133, :height => 80}
+    fake_ioctl = lambda {|num, buf| buf.replace FAKE_IOCTL_RESULT; 0 }
+    $stdout.stub :ioctl, fake_ioctl do
       assert_equal expected, Terminal.size_via_low_level_ioctl
     end
     Terminal.stub :`, '80 133' do

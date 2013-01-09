@@ -48,7 +48,7 @@ class Terminal
 
     private
     def _height_width_hash_from *dimensions
-      { height: dimensions[0], width: dimensions[1] }
+      { :height => dimensions[0], :width => dimensions[1] }
     end
 
   end
