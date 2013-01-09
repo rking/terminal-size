@@ -1,5 +1,5 @@
 class Terminal
-  class Size; VERSION = '0.0.5' end
+  class Size; VERSION = '0.0.6' end
   class << self
     def size
       size_via_low_level_ioctl or size_via_stty or nil
